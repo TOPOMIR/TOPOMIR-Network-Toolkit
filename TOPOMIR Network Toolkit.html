@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOPOMIR - Network Toolkit Ultimate Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --azul-escuro: #1a365d; --azul: #2b6cb0; --azul-claro: #4299e1;
+            --verde: #38a169; --vermelho: #e53e3e; --amarelo: #ecc94b; --roxo: #805ad5;
+            --laranja: #ed8936; --cinza-escuro: #2d3748; --cinza: #718096; --cinza-claro: #edf2f7; 
+            --branco: #ffffff; --borda: #e2e8f0;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: #f7fafc; color: var(--cinza-escuro); padding-bottom: 60px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { 
+            background: linear-gradient(135deg, var(--azul-escuro), var(--azul)); 
+            color: white; padding: 1.5rem 0; margin-bottom: 2rem; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+
+        .titulo-secao { margin: 30px 0 15px; color: var(--azul-escuro); display: flex; align-items: center; gap: 10px; font-size: 1.4rem; border-left: 5px solid var(--azul); padding-left: 10px; }
+        
+        .layout { display: grid; grid-template-columns: 400px 1fr; gap: 25px; }
+        @media (max-width: 950px) { .layout { grid-template-columns: 1fr; } }
+        
+        .cartao { 
+            background: var(--branco); border-radius: 12px; padding: 25px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid var(--borda); 
+            margin-bottom: 20px; 
+        }
+        
+        .titulo-cartao { 
+            font-size: 1.1rem; color: var(--azul-escuro); margin-bottom: 15px; 
+            display: flex; align-items: center; gap: 10px; font-weight: 700; 
+            border-bottom: 2px solid var(--cinza-claro); padding-bottom: 10px; 
+        }
+        
+        .grupo-input { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; }
+        input, select { width: 100%; padding: 10px; border: 1px solid var(--borda); border-radius: 8px; font-size: 0.95rem; }
+        
+        .botao { 
+            width: 100%; padding: 12px; border: none; border-radius: 8px; 
+            font-weight: 700; cursor: pointer; transition: 0.3s; 
+            background: var(--azul); color: white; margin-top: 10px;
+        }
+        .botao:hover { background: var(--azul-escuro); transform: translateY(-1px); }
+
+        .grade-res { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 20px;}
+        .item-res { background: var(--cinza-claro); padding: 12px; border-radius: 8px; border-left: 4px solid var(--azul-claro); }
+        .item-res span { font-size: 0.65rem; color: var(--cinza); font-weight: bold; text-transform: uppercase; }
+        .item-res strong { display: block; font-size: 0.95rem; color: var(--azul-escuro); font-family: 'Consolas', monospace; margin-top: 4px; cursor: pointer; }
+
+        .scroll-area { max-height: 400px; overflow-y: auto; border: 1px solid var(--borda); border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { background: #f8fafc; text-align: left; padding: 12px; position: sticky; top: 0; border-bottom: 2px solid var(--borda); z-index: 5; }
+        td { padding: 10px; border-bottom: 1px solid var(--cinza-claro); }
+        
+        .box-dark { background: #1a202c; color: white; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; line-height: 1.4; }
+        .badge { padding: 2px 8px; border-radius: 50px; background: var(--azul-claro); color: white; font-size: 0.75rem; font-weight: bold; }
+
+        .obstaculo-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+        .btn-mini { padding: 5px 10px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.7rem; font-weight: bold; }
+        .btn-add { background: var(--verde); color: white; }
+        .btn-rem { background: var(--vermelho); color: white; }
+
+        .pass-generator {
+            background: #edf2f7; border: 1px dashed var(--roxo); padding: 15px; border-radius: 8px; margin-top: 15px;
+        }
+        .pass-display {
+            background: #1a202c; color: #63b3ed; padding: 12px; border-radius: 6px; 
+            font-family: 'Consolas', monospace; font-size: 1rem; margin-top: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid #4a5568; word-break: break-all;
+        }
+        .pass-display i { cursor: pointer; color: #a0aec0; transition: 0.2s; }
+        .pass-display i:hover { color: white; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h2><i class="fas fa-network-wired"></i> TOPOMIR Network Toolkit Pro</h2>
+    </div>
+</header>
+
+<main class="container">
+    
+    <h3 class="titulo-secao"><i class="fas fa-search-location"></i> Descoberta de Endereço & Wildcard</h3>
+    <section class="cartao">
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+            <div style="flex: 3; min-width: 250px;">
+                <label>IP e CIDR (Ex: 192.168.10.5/24)</label>
+                <input type="text" id="ipDescoberta" placeholder="Digite ex: 172.16.5.30/22">
+            </div>
+            <button id="btnDescobrir" class="botao" style="flex: 1; margin-top: 0;">Analisar IP</button>
+        </div>
+        <div id="resultadoDescoberta" class="grade-res" style="display: none;">
+            <div class="item-res"><span>ID da Rede</span><strong id="descRede" onclick="copiar(this)">-</strong></div>
+            <div class="item-res"><span>Intervalo Útil</span><strong id="descRange" onclick="copiar(this)">-</strong></div>
+            <div class="item-res"><span>Broadcast</span><strong id="descBroad" onclick="copiar(this)">-</strong></div>
+            <div class="item-res" style="border-left-color: var(--roxo)"><span>Wildcard (ACL)</span><strong id="descWildcard" onclick="copiar(this)" style="color:var(--roxo)">-</strong></div>
+            <div class="item-res" style="border-left-color: var(--roxo)"><span>Classe / Tipo</span><strong id="descClasse">-</strong></div>
+        </div>
+    </section>
+
+    <h3 class="titulo-secao"><i class="fas fa-history"></i> DHCP Lease Time Converter</h3>
+    <section class="cartao">
+        <div class="layout" style="grid-template-columns: 1fr 1fr;">
+            <div>
+                <label>Tempo de Aluguel</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <input type="number" id="leaseDias" value="0">
+                    <input type="number" id="leaseHoras" value="24">
+                    <input type="number" id="leaseMinutos" value="0">
+                </div>
+                <button id="btnLease" class="botao" style="background: var(--verde);">Gerar Configurações</button>
+            </div>
+            <div id="resultadoLease" style="display: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="box-dark"><h4 style="color:var(--amarelo); font-size:0.7rem">SEGUNDOS</h4><div id="leaseSeg">-</div></div>
+                <div class="box-dark"><h4 style="color:var(--amarelo); font-size:0.7rem">FORMATO</h4><div id="leaseFormatado">-</div></div>
+            </div>
+        </div>
+    </section>
+
+    <h3 class="titulo-secao"><i class="fas fa-sitemap"></i> Planejador de Sub-redes</h3>
+    <div class="layout">
+        <aside>
+            <section class="cartao">
+                <div class="grupo-input"><label>IP Base</label><input type="text" id="ipSub" value="192.168.1.0"></div>
+                <div class="grupo-input"><label>Máscara Original</label><select id="mascaraSub"></select></div>
+                <div class="grupo-input"><label>Nº Sub-redes</label><input type="number" id="numSub" value="4"></div>
+                <button id="btnCalcularSub" class="botao">Gerar Tabela</button>
+            </section>
+        </aside>
+        <section class="cartao">
+            <div class="scroll-area">
+                <table id="tabelaSub">
+                    <thead><tr><th>#</th><th>Rede</th><th>Hosts Úteis</th><th>Broadcast</th><th>CIDR</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <h3 class="titulo-secao" style="border-left-color: var(--laranja)"><i class="fas fa-broadcast-tower"></i> Radiofrequência & Agregação Pro</h3>
+    <div class="layout">
+        <section class="cartao">
+            <h2 class="titulo-cartao"><i class="fas fa-wifi"></i> WiFi RF Budget (Análise de Sinal)</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="grupo-input">
+                    <label>Frequência</label>
+                    <select id="wifiFreq">
+                        <option value="2.4">2.4 GHz</option>
+                        <option value="5.2">5.0 GHz</option>
+                        <option value="6.0">6.0 GHz</option>
+                    </select>
+                </div>
+                <div class="grupo-input"><label>Distância (m)</label><input type="number" id="wifiDist" value="10"></div>
+            </div>
+
+            <div class="grupo-input">
+                <label>Obstáculos no Caminho <button class="btn-mini btn-add" onclick="addObstaculo()"><i class="fas fa-plus"></i> Add</button></label>
+                <div id="listaObstaculos">
+                    <div class="obstaculo-row">
+                        <select class="obst-select">
+                            <option value="3">Drywall / Vidro Comum (-3 dB)</option>
+                            <option value="6">Vidro Aramado / Blindex (-6 dB)</option>
+                            <option value="5">Porta de Madeira (-5 dB)</option>
+                            <option value="10">Porta Corta-Fogo / Metal (-10 dB)</option>
+                            <option value="12">Parede de Tijolo Maciço (-12 dB)</option>
+                            <option value="18">Concreto Armado (-18 dB)</option>
+                            <option value="20">Parede de Pedra (-20 dB)</option>
+                            <option value="8">Prateleiras de Estoque (-8 dB)</option>
+                            <option value="4">Interferência Micro-ondas (-4 dB)</option>
+                            <option value="2">Interferência Eletromecânica (Vent/AC) (-2 dB)</option>
+                            <option value="2">Atenuação por Altura (> 3m) (-2 dB)</option>
+                        </select>
+                        <button class="btn-mini btn-rem" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="botao" style="background:var(--laranja)" onclick="calcWiFi()">Simular Cobertura</button>
+            
+            <div id="resWiFi" class="box-dark" style="display:none; margin-top:15px;">
+                <div style="display:flex; justify-content: space-between;"><span>Perda Espaço Livre:</span> <span id="wPerdaAr">-</span></div>
+                <div style="display:flex; justify-content: space-between;"><span>Atenuação Barreiras:</span> <span id="wPerdaOb">-</span></div>
+                <hr style="margin: 8px 0; border: 0; border-top: 1px solid #4a5568;">
+                <div style="font-size: 1.1rem; color: var(--amarelo)">
+                    <strong>RSSI ESTIMADO: <span id="wRSSI">-</span></strong>
+                </div>
+                <div id="wStatus" style="font-weight: bold; margin-top: 5px; text-align: center; border-radius: 4px; padding: 2px;"></div>
+            </div>
+        </section>
+
+        <section class="cartao">
+            <h2 class="titulo-cartao"><i class="fas fa-random"></i> LACP / EtherChannel Advanced</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+                <div class="grupo-input"><label>Nº Links</label><input type="number" id="lacpLinks" value="2" min="2" max="8"></div>
+                <div class="grupo-input"><label>Velocidade</label><select id="lacpSpeed"><option value="1000">1 Gbps</option><option value="10000">10 Gbps</option></select></div>
+            </div>
+            <div class="grupo-input">
+                <label>Método de Balanceamento (Hash)</label>
+                <select id="lacpHash">
+                    <option value="0.90">L3: Source/Dest IP (Equilibrado)</option>
+                    <option value="0.70">L2: Source/Dest MAC (Básico)</option>
+                    <option value="0.96">L4: IP + Portas (Máxima Eficiência)</option>
+                </select>
+            </div>
+            <button class="botao" style="background:var(--verde)" onclick="calcLACPPro()">Analisar Performance</button>
+            <table style="margin-top:15px; background: #f8fafc; border: 1px solid var(--borda);">
+                <thead><tr><th>Métrica</th><th>Valor Estimado</th></tr></thead>
+                <tbody>
+                    <tr><td>Vazão Real do Trunk</td><td id="lCap">-</td></tr>
+                    <tr><td>Redundância (Failover)</td><td id="lFail">-</td></tr>
+                    <tr><td>Cenário Ideal</td><td id="lRec">-</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <h3 class="titulo-secao" style="border-left-color: var(--vermelho)"><i class="fas fa-shield-alt"></i> Segurança & Infraestrutura</h3>
+    <div class="layout" style="grid-template-columns: 1fr;">
+        <section class="cartao">
+            <h2 class="titulo-cartao"><i class="fas fa-user-shield"></i> VPN Security & Hash Analyzer</h2>
+            <div class="grupo-input">
+                <label>Criptografia (Phase 1/2)</label>
+                <select id="vpnEnc">
+                    <option value="4">AES-GCM-256 (Máxima - IKEv2)</option>
+                    <option value="4">AES-GCM-128 (Alta Performance)</option>
+                    <option value="3">AES-256 (Padrão Corporativo)</option>
+                    <option value="3">AES-192 (Seguro)</option>
+                    <option value="2">AES-128 (Equilibrado)</option>
+                    <option value="1">3DES (Legado - Não Recomendado)</option>
+                    <option value="0">DES (Obsoleto - Vulnerável)</option>
+                    <option value="0">NULL (Sem Criptografia - Testes)</option>
+                </select>
+            </div>
+            <div class="grupo-input">
+                <label>Algoritmo de Hash (Integridade)</label>
+                <select id="vpnHash">
+                    <option value="4">SHA-512 (Ultra Seguro)</option>
+                    <option value="3">SHA-384 (Muito Seguro)</option>
+                    <option value="3">SHA-256 (Recomendado)</option>
+                    <option value="2">SHA-1 (Depreciado)</option>
+                    <option value="1">MD5 (Inseguro - Colisões)</option>
+                </select>
+            </div>
+            <div class="grupo-input">
+                <label>Diffie-Hellman Group (Key Exchange)</label>
+                <select id="vpnDH">
+                    <option value="4">Group 21 (NIST P-524 - Eliptica)</option>
+                    <option value="4">Group 20 (NIST P-384 - Eliptica)</option>
+                    <option value="4">Group 19 (NIST P-256 - Eliptica)</option>
+                    <option value="3">Group 16 (4096-bit Modular)</option>
+                    <option value="3">Group 15 (3072-bit Modular)</option>
+                    <option value="3">Group 14 (2048-bit Modular - Mínimo OK)</option>
+                    <option value="1">Group 5 (1536-bit - Fraco)</option>
+                    <option value="1">Group 2 (1024-bit - Legado)</option>
+                    <option value="0">Group 1 (768-bit - Quebrado)</option>
+                </select>
+            </div>
+            <button class="botao" style="background:var(--roxo)" onclick="analyzeVPN()">Verificar Compliance & Gerar PSK</button>
+            
+            <div id="resVPN" style="display:none; margin-top:15px;">
+                <div class="item-res" style="border-left: 4px solid var(--roxo); margin-bottom:10px; background:#f0f4f8">
+                    <span>Nível de Segurança</span>
+                    <strong id="vpnNivel">-</strong>
+                </div>
+
+                <div class="pass-generator">
+                    <label style="color:var(--roxo); font-size: 0.75rem;">CHAVE PRÉ-COMPARTILHADA (PSK) RECOMENDADA</label>
+                    <div class="pass-display">
+                        <span id="vpnPass">Gerando...</span>
+                        <i class="fas fa-copy" onclick="copiarTexto(document.getElementById('vpnPass').innerText)" title="Copiar Senha"></i>
+                    </div>
+                </div>
+
+                <div class="box-dark" id="vpnStatus" style="font-size: 0.8rem; margin-top: 10px;"></div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+    // --- Utilitários ---
+    const ipToLong = ip => ip.split('.').reduce((acc, oct) => (acc << 8) + parseInt(oct, 10), 0) >>> 0;
+    const longToIp = l => [(l >>> 24) & 255, (l >>> 16) & 255, (l >>> 8) & 255, l & 255].join('.');
+    const getMascaraLong = cidr => cidr === 0 ? 0 : 0xFFFFFFFF << (32 - cidr) >>> 0;
+
+    function copiar(el) {
+        copiarTexto(el.innerText);
+        const old = el.innerText; el.innerText = "Copiado!";
+        setTimeout(() => el.innerText = old, 800);
+    }
+
+    function copiarTexto(texto) {
+        navigator.clipboard.writeText(texto);
+    }
+
+    // --- Inicialização ---
+    const selM = document.getElementById('mascaraSub');
+    for(let i=8; i<=32; i++){
+        let opt = document.createElement('option');
+        opt.value = i; opt.innerHTML = `/${i} — ${longToIp(getMascaraLong(i))}`;
+        if(i===24) opt.selected = true;
+        selM.appendChild(opt);
+    }
+
+    // --- Lógica Descoberta IP ---
+    document.getElementById('btnDescobrir').onclick = () => {
+        const ent = document.getElementById('ipDescoberta').value;
+        if(!ent.includes('/')) return alert("Use IP/CIDR");
+        const [ip, cidr] = ent.split('/');
+        const c = parseInt(cidr);
+        const ipL = ipToLong(ip), mskL = getMascaraLong(c);
+        const rL = (ipL & mskL) >>> 0, bL = (rL | (~mskL)) >>> 0;
+        document.getElementById('descRede').innerText = longToIp(rL);
+        document.getElementById('descBroad').innerText = longToIp(bL);
+        document.getElementById('descWildcard').innerText = longToIp(~mskL >>> 0);
+        document.getElementById('descRange').innerText = `${longToIp(rL+1)} - ${longToIp(bL-1)}`;
+        const first = ipL >>> 24;
+        document.getElementById('descClasse').innerText = first < 128 ? "Classe A" : first < 192 ? "Classe B" : "Classe C";
+        document.getElementById('resultadoDescoberta').style.display = 'grid';
+    };
+
+    // --- Lógica DHCP Lease ---
+    document.getElementById('btnLease').onclick = () => {
+        const s = (parseInt(document.getElementById('leaseDias').value||0)*86400)+(parseInt(document.getElementById('leaseHoras').value||0)*3600)+(parseInt(document.getElementById('leaseMinutos').value||0)*60);
+        document.getElementById('leaseSeg').innerText = s + "s";
+        document.getElementById('leaseFormatado').innerText = Math.floor(s/3600).toString().padStart(2,'0')+":"+Math.floor((s%3600)/60).toString().padStart(2,'0')+":"+(s%60).toString().padStart(2,'0');
+        document.getElementById('resultadoLease').style.display = 'grid';
+    };
+
+    // --- Lógica Sub-redes ---
+    document.getElementById('btnCalcularSub').onclick = () => {
+        const ip = document.getElementById('ipSub').value, cidr = parseInt(selM.value), num = parseInt(document.getElementById('numSub').value);
+        const bExtra = Math.ceil(Math.log2(num)), nCidr = cidr + bExtra, salto = Math.pow(2, 32 - nCidr);
+        const base = (ipToLong(ip) & getMascaraLong(cidr)) >>> 0;
+        const tbody = document.querySelector('#tabelaSub tbody');
+        tbody.innerHTML = "";
+        for(let i=0; i<Math.min(num, 100); i++){
+            let r = base + (i * salto), b = r + salto - 1;
+            tbody.innerHTML += `<tr><td>${i+1}</td><td><b>${longToIp(r)}</b></td><td>${longToIp(r+1)} - ${longToIp(b-1)}</td><td>${longToIp(b)}</td><td><span class="badge">/${nCidr}</span></td></tr>`;
+        }
+    };
+
+    // --- Lógica WiFi Profissional ---
+    function addObstaculo() {
+        const container = document.getElementById('listaObstaculos');
+        const div = document.createElement('div');
+        div.className = 'obstaculo-row';
+        div.innerHTML = `
+            <select class="obst-select">
+                <option value="3">Drywall / Vidro Comum (-3 dB)</option>
+                <option value="6">Vidro Aramado / Blindex (-6 dB)</option>
+                <option value="5">Porta de Madeira (-5 dB)</option>
+                <option value="10">Porta Corta-Fogo / Metal (-10 dB)</option>
+                <option value="12">Parede de Tijolo Maciço (-12 dB)</option>
+                <option value="18">Concreto Armado (-18 dB)</option>
+                <option value="20">Parede de Pedra (-20 dB)</option>
+                <option value="8">Prateleiras de Estoque (-8 dB)</option>
+                <option value="4">Interferência Micro-ondas (-4 dB)</option>
+                <option value="2">Interferência Eletromecânica (Vent/AC) (-2 dB)</option>
+                <option value="2">Atenuação por Altura (> 3m) (-2 dB)</option>
+            </select>
+            <button class="btn-mini btn-rem" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></button>
+        `;
+        container.appendChild(div);
+    }
+
+    function calcWiFi() {
+        const f = parseFloat(document.getElementById('wifiFreq').value);
+        const d = parseFloat(document.getElementById('wifiDist').value);
+        const loss = (20 * Math.log10(d)) + (20 * Math.log10(f * 1000)) - 27.55;
+        let totalObstLoss = 0;
+        document.querySelectorAll('.obst-select').forEach(sel => {
+            totalObstLoss += parseFloat(sel.value);
+        });
+        const txPower = 20; 
+        const rssi = txPower - loss - totalObstLoss;
+        document.getElementById('wPerdaAr').innerText = "-" + loss.toFixed(1) + " dB";
+        document.getElementById('wPerdaOb').innerText = "-" + totalObstLoss.toFixed(1) + " dB";
+        document.getElementById('wRSSI').innerText = rssi.toFixed(0) + " dBm";
+        const st = document.getElementById('wStatus');
+        if(rssi > -67) { 
+            st.innerText = "SINAL EXCELENTE: Ideal para Voz/Vídeo 4K"; 
+            st.style.background = "#c6f6d5"; st.style.color = "#22543d";
+        } else if(rssi > -75) { 
+            st.innerText = "SINAL BOM: Estável para navegação geral"; 
+            st.style.background = "#feebc8"; st.style.color = "#744210";
+        } else if(rssi > -85) { 
+            st.innerText = "SINAL FRACO: Quedas e lentidão frequentes"; 
+            st.style.background = "#fff5f5"; st.style.color = "#c53030";
+        } else { 
+            st.innerText = "SEM CONEXÃO: Abaixo do limiar útil"; 
+            st.style.background = "#2d3748"; st.style.color = "white";
+        }
+        document.getElementById('resWiFi').style.display = 'block';
+    }
+
+    // --- Lógica LACP ---
+    function calcLACPPro() {
+        const n = parseInt(document.getElementById('lacpLinks').value), s = parseInt(document.getElementById('lacpSpeed').value), h = parseFloat(document.getElementById('lacpHash').value);
+        document.getElementById('lCap').innerText = ((n * s * h)/1000).toFixed(2) + " Gbps";
+        document.getElementById('lFail').innerText = (n-1) + " link(s)";
+        document.getElementById('lRec').innerText = h > 0.9 ? "Servidor / Trunk Core" : "Acesso usuário";
+    }
+
+    // --- Lógica VPN Security ---
+    function generatePSK(strength) {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+        let length = 16; 
+        if (strength >= 4) length = 64;      
+        else if (strength >= 3) length = 32; 
+        else if (strength >= 2) length = 24; 
+        const randomValues = new Uint8Array(length);
+        window.crypto.getRandomValues(randomValues);
+        let pass = "";
+        for (let i = 0; i < length; i++) { pass += chars.charAt(randomValues[i] % chars.length); }
+        return pass;
+    }
+
+    function analyzeVPN() {
+        const enc = parseInt(document.getElementById('vpnEnc').value);
+        const hash = parseInt(document.getElementById('vpnHash').value);
+        const dh = parseInt(document.getElementById('vpnDH').value);
+        let nivel = ""; let statusText = ""; let color = "";
+
+        if(enc === 0 || hash === 1 || dh === 0) {
+            nivel = "INSEGURO / VULNERÁVEL";
+            color = "var(--vermelho)";
+            statusText = "• PERIGO: Uso de algoritmos quebrados (DES/MD5) ou DH obsoleto.<br>• Sujeito a ataques Man-in-the-Middle e Brute Force em minutos.";
+        } else if(enc >= 4 && hash >= 3 && dh >= 4) {
+            nivel = "MILITARY GRADE (GCM/ECC)";
+            color = "var(--verde)";
+            statusText = "• Suite-B Compliance: Criptografia de curva elíptica e GCM.<br>• Máxima segurança e eficiência de processamento.";
+        } else if(enc >= 3 && hash >= 3 && dh >= 3) {
+            nivel = "ALTA SEGURANÇA (Corporativo)";
+            color = "var(--azul-claro)";
+            statusText = "• Recomendado para túneis IPsec permanentes.<br>• Atende requisitos PCI-DSS e LGPD para transmissão de dados.";
+        } else {
+            nivel = "MODERADO (Legado)";
+            color = "var(--amarelo)";
+            statusText = "• Uso em equipamentos antigos sem suporte a SHA-2 ou DH 14+.<br>• SHA-1 e 3DES estão sendo descontinuados mundialmente.";
+        }
+        document.getElementById('vpnNivel').innerText = nivel;
+        document.getElementById('vpnNivel').style.color = color;
+        document.getElementById('vpnStatus').innerHTML = statusText;
+        const avgStrength = (enc + hash + dh) / 3;
+        document.getElementById('vpnPass').innerText = generatePSK(avgStrength);
+        document.getElementById('resVPN').style.display = 'block';
+    }
+</script>
+</body>
+</html>
