@@ -1,6 +1,6 @@
-================================================================================
+
            MANUAL DO USUÁRIO E DOCUMENTAÇÃO TÉCNICA
-================================================================================
+
 
 1. INTRODUÇÃO
 A TOPOMIR Network Toolkit Pro é uma aplicação projetada para administradores de 
@@ -87,6 +87,3 @@ D. SEGURANÇA E CRIPTOGRAFIA (VPN)
   obstáculos físicos do que o de 2.4GHz.
 - Para máxima segurança em VPNs, prefira algoritmos AES-GCM e DH Group 19 ou 21.
 
-================================================================================
-                     FIM DA DOCUMENTAÇÃO - TOPOMIR 2026
-================================================================================
