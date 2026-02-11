@@ -1,7 +1,3 @@
-
-           MANUAL DO USUÁRIO E DOCUMENTAÇÃO TÉCNICA
-
-
 1. INTRODUÇÃO
 A TOPOMIR Network Toolkit é uma aplicação projetada para administradores de 
 redes e engenheiros de infraestrutura. Ela consolida cálculos de sub-redes, 
